@@ -158,6 +158,7 @@ public class ValidationItemControllerV2 {
         }
 
         if (bindingResult.hasErrors()) {
+            System.out.println("bindingResult = " + bindingResult);
             return "validation/v2/addForm";
         }
 
