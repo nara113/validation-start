@@ -43,6 +43,13 @@ public class ValidationItemControllerV3 {
 
     @PostMapping("/add")
     public String addItemV1(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (item.getPrice() != null && item.getQuantity() != null) {
+            int totalPrice = item.getPrice() * item.getQuantity();
+            if (totalPrice < 10_000) {
+                bindingResult.reject("totalPriceMin", new Object[]{10000, totalPrice}, null);
+            }
+        }
+
         if (bindingResult.hasErrors()) {
             return "validation/v3/addForm";
         }
