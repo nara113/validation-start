@@ -15,7 +15,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -82,7 +84,7 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-    //    @PostMapping("/add")
+    //    @PostMapping("/add")  rejectedValue: 사용자 입력값 유
     public String addItemV2(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (!StringUtils.hasText(item.getItemName())) {
             bindingResult.addError(new FieldError("item", "itemName", item.getItemName(), false, null, null, "상품 이름은 필수입니다."));
@@ -113,7 +115,7 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-    //    @PostMapping("/add")
+    //    @PostMapping("/add") MessageSource를 찾아서 메시지 조회
     public String addItemV3(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (!StringUtils.hasText(item.getItemName())) {
             bindingResult.addError(new FieldError("item", "itemName", item.getItemName(), false, new String[]{"required.item.itemName", "required.default"}, null, null));
@@ -144,7 +146,7 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-//    @PostMapping("/add")
+//    @PostMapping("/add") rejectValue를 이용해서 오류 코드를 간단하게 입력
     public String addItemV4(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (!StringUtils.hasText(item.getItemName())) {
             bindingResult.rejectValue("itemName", "required");
@@ -184,6 +186,14 @@ public class ValidationItemControllerV2 {
 //    @PostMapping("/add")
     public String addItemV5(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         itemValidator.validate(item, bindingResult);
+        LinkedHashMap m = new LinkedHashMap(1, 1F, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry eldest) {
+                return super.removeEldestEntry(eldest);
+            }
+        };
+
+        ItemValidator.Inner inner = new ItemValidator.Inner();
 
         if (bindingResult.hasErrors()) {
             return "validation/v2/addForm";

@@ -8,6 +8,10 @@ import org.springframework.validation.Validator;
 
 @Component
 public class ItemValidator implements Validator {
+    static class Inner {
+
+    }
+
     @Override
     public boolean supports(Class<?> clazz) {
         return Item.class.isAssignableFrom(clazz);
