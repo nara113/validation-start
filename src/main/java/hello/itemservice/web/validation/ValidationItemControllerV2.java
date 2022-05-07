@@ -159,6 +159,11 @@ public class ValidationItemControllerV2 {
 
         if (bindingResult.hasErrors()) {
             System.out.println("bindingResult = " + bindingResult);
+
+//            bindingResult = org.springframework.validation.BeanPropertyBindingResult: 3 errors
+//            Field error in object 'item' on field 'itemName': rejected value []; codes [required.item.itemName,required.itemName,required.java.lang.String,required]; arguments []; default message [null]
+//            Field error in object 'item' on field 'price': rejected value [1]; codes [range.item.price,range.price,range.java.lang.Integer,range]; arguments [1000,1000000]; default message [null]
+//            Error in object 'item': codes [totalPriceMin.item,totalPriceMin]; arguments [10000,1]; default message [null]
             return "validation/v2/addForm";
         }
 
